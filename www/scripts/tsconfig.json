@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "sourceMap": true,
+        "module": "commonjs",
+        "jsx": "react",
+        "sourceRoot": "src/",
+        "outDir": "lib"
+    },
+    "files": [
+        "src/index.ts",
+        "../../typings/index.d.ts"
+    ]
+}

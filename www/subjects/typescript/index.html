@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <link type="text/css" rel="stylesheet" href="/external/reveal.js-3.3.0/css/reveal.css" />
+        <link type="text/css" rel="stylesheet" href="/external/reveal.js-3.3.0/css/theme/league.css" />
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/atelier-estuary-dark.min.css">
+        <style>
+            .reveal section img { 
+                background:none; 
+                border:none; 
+                box-shadow:none; 
+            }
+        </style>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <h1>TypeScript</h1>
+                    <h2>JavaScript Tomorrow, Today</h2>
+                </section>
+
+                <section>
+                    <h2>What We Will Cover</h2>
+                    <ol>
+                        <li>Overview</li>
+                        <li>Compilation Model</li>
+                        <li>Type System</li>
+                        <li>ES6 Language Features</li>
+                        <li>ES6 API</li>
+                        <li>Modules</li>
+                        <li>Resources</li>
+                    </ol>
+                </section>
+                <section>
+                    <h3>Part I. Overview</h3>
+                    <section>
+                        <h2>Problem with JavaScript</h2>
+                        <ul>
+                            <li>Started as a toy language</li>
+                            <li>Lots of Gotchas</li>
+                            <li>Dynamic typing</li>
+                            <li>Prototypical object model</li>
+                            <li>Browser support</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>What TypeScript Brings</h2>
+                        <ul>
+                            <li class="fragment">Type annotation</li>
+                            <li class="fragment">Syntatic sugar</li>
+                            <li class="fragment">Down targetting</li>
+                            <li class="fragment">Tooling support</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Sneak Peek - JavaScript</h2>
+                        <pre><code class="JavaScript">
+    function Person(firstName, lastName) {
+        this.firstName = firstName;
+        if (lastName === undefined)
+            this.lastName = "";
+        else
+            this.lastName = lastName;
+    }
+
+    Person.prototype.getFullName = function () {
+        return this.firstName + " " + this.lastName;
+    };
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Sneak Peek - TypeScript</h2>
+                        <pre><code class="TypeScript">
+    class Person {
+        firstName: string;
+        lastName: string;
+
+        constructor(firstName: string, lastName = "") {
+            this.firstName = firstName;
+            this.lastName = lastName;
+        }
+
+        get fullName() {
+            return `${this.firstName} ${this.lastName}`;
+        }
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <p>Questions?</p>
+                    </section>
+                </section>
+                <section>
+                    <h3>Part II. Compilation Model</h3>
+
+                    <section>
+                        <h2>The TypeScript Compiler</h2>
+                        <ul>
+                            <li>tsc.exe</li>
+                            <li>NPM Package</li>
+                            <li>NuGet</li>
+                            <li>Visual Studio Extension</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>One-to-One Compilation</h2>
+                        <img src="img/compilation-model-1.png" title="one-to-one compilation diagram"/>
+                        <pre><code class="html">
+    &lt;script src="DateTime.js"&gt;&lt;/script&gt;
+    &lt;script src="Calendar.js"&gt;&lt;/script&gt;
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>How Do I Debug?</h2>
+                        <ul>
+                            <li>Source maps to rescue</li>
+                            <li>Maps lexical locations in JS to TS</li>
+                            <li>Debugging directly in TS</li>
+                            <li>Source maps can be composed</li>
+                            <li>Map: lib.ts &rarr; lib.js &rarr; lib.min.js</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Merge Compilation</h2>
+                        <img src="img/compilation-model-2.png" title="merge compilation diagram"/>
+                        <pre><code class="html">
+    &lt;script src="everything.js"&gt;&lt;/script&gt;
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Type Definition File</h2>
+                        <ul>
+                            <li>my-lib.d.ts</li>
+                            <li>No executable code</li>
+                            <li>Just type definition (metadata)</li>
+                            <li>Codified documentation</li>
+                            <li>Definitely-Typed (community)</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Using Type Definition File</h2>
+                        <img src="img/compilation-model-dts.png" title="one-to-one compilation diagram"/>
+                        <pre><code class="html">
+    &lt;script src="thirdparty/DateTime.js"&gt;&lt;/script&gt;
+    &lt;script src="Calendar.js"&gt;&lt;/script&gt;
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Cross Referencing</h2>
+                        <ul>
+                            <li>Ambient Type Definitions</li>
+                            <li>///&lt;reference path="dependency.d.ts" /&gt;</li>
+                            <li>Module resolution</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <p>Questions?</p>
+                    </section>
+                </section>
+                
+                <section>
+                    <h3>Part III. Type System</h3>
+
+                    <section>
+                        <h2>TypeScript Types</h2>
+                        <ul>
+                            <li>Explicite</li>
+                            <li>Flexible</li>
+                            <li>Structural</li>
+                            <li>Different from e.g. .Net</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Primitives</h2>
+                        <ul>
+                            <li>undefined</li>
+                            <li>null</li>
+                            <li>number</li>
+                            <li>boolean</li>
+                            <li>string</li>
+                            <li>symbol</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example: Primitives</h2>
+                        <pre><code class="TypeScript">
+    function max(x<span class="fragment" data-fragment-index="1">: number</span>, y<span class="fragment" data-fragment-index="1">: number</span>)<span class="fragment" data-fragment-index="1">: number</span> {
+        return x < y ? y : x;
+    }
+
+    const a<span class="fragment" data-fragment-index="1">: number</span> = 42; // inferred
+    const b = 24; <span class="fragment" data-fragment-index="2">// type is inferred</span>
+    const c = max(a, b); <span class="fragment" data-fragment-index="3">// type is inferred</span>
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Special Types</h2>
+                        <ul>
+                            <li>void &rarr; indicate no return from function</li>
+                            <li>any &rarr; wildcard</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Example: Any & Void</h2>
+                        <pre><code class="TypeScript">
+    function log(stream: FileStream, value: any): void {
+        if (typeof value === "string") {
+            stream.writeln(value);
+        }
+        else if (typeof value === "number") {
+            stream.writeln(value.toString());
+        }
+        else if (value instanceof Date) {
+            const year = value.getFullYear();
+            const month = 1 + value.getMonth();
+            stream.writeln(`${year}-${month}`);
+        }
+        // ...
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Object Types</h2>
+                        <ul>
+                            <li>Direct mapping to JavaScript Objects</li>
+                            <li>Has runtime doubles</li>
+                            <li>Object, Function, Array, etc</li>
+                            <li>Boxing and unboxing</li>
+                            <li>Modelled as interfaces in lib.d.ts</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <pre><code class="TypeScript">
+    let d = new Date();
+    let x: Object = d;
+    let a: number[] = [1, 2, 3, 4];
+    let f: Function = function () {};
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Classes</h2>
+                        <ul>
+                            <li>Alternative to writing constructor functions</li>
+                            <li>Easier inheritance</li>
+                            <li>Static and instance methods</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example - Class</h2>
+                        <pre><code class="TypeScript">
+    abstract class Fruit {
+        private weight: number;
+        constructor(weight = 0)
+        abstract get colour(): string;
+    }
+
+    class Orange extends Fruit {
+        get colour() {
+            return "orange";
+        }
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Interfaces</h2>
+                        <ul>
+                            <li>Type specification</li>
+                            <li>Declaration only</li>
+                            <li>Interface can extend another interface</li>
+                            <li>Members can be:
+                                <ul>
+                                    <li>Fields</li>
+                                    <li>Getters/setters</li>
+                                    <li>Methods</li>
+                                    <li>Callable</li>
+                                    <li>Indexer</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example - Interface</h2>
+                        <pre><code class="TypeScript">
+    interface Formattable {
+        format(formatString: string): string;
+    }
+
+    class DateTime implements Formattable {
+        private date: Date;
+        constructor(date: Date) { this.date = date; }
+        format(formatString: string): string {
+            // ...
+        }
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Example - Interface</h2>
+                        <pre><code class="TypeScript">
+    interface MaxFunction {
+        (n1: number, n2: number): number;
+        (d1: Date, d2: Date): Date;
+    }
+
+    const max: MaxFunction = function (x1: any, x2: any): any {
+        if (typeof x1 === "number" && typeof x2 === "number") {
+            return x1 < x2 ? x2 : x1;
+        }
+        else if (x1 instanceof Date && x2 instanceof Date) {
+            return x1.valueOf() < x2.valueOf() ? x2 : x1;
+        }
+    };
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Example - Interface</h2>
+                        <pre><code class="TypeScript">
+    interface SyntaxNode {
+        location: SourceLocation;
+        type: string;
+    }
+
+    interface SyntaxNodeCtor {
+        new(location: SourceLocation): SyntaxNode;
+    }
+                            </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Example - Interface</h2>
+                        <pre><code class="TypeScript">
+    functon getSyntaxNodeCtor(type: string): SyntaxNodeCtor {
+        switch (type) {
+            case "+": return class PlusNode implements SyntaxNode {
+                constructor(location: SourceLocation) { 
+                    this.location = location; 
+                }
+                locaton: SourceLocation;
+                type: string = type;
+            };
+            case "-": //...
+        }
+    }
+
+    const PlusNode = getSyntaxNodeCtor("+");
+    const node = new PlusNode(currentLocation);
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Enum</h2>
+                        <ul>
+                            <li>Numbers with names</li>
+                            <li>Runtime object provides mapping</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example - Enum</h2>
+                        <pre><code class="TypeScript">
+    enum Month {
+        Jan, Feb, Mar, Apr, May, Jun,
+        Jul, Aug, Sep, Oct, Nov, Dec
+    }
+
+    const date = new Date(2012, Month.Jan, 1);
+    const monthName = Month[date.getMonth()];
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Compound Type</h2>
+                        <ul>
+                            <li>Similar to interface</li>
+                            <li>Convenient for inlined types</li>
+                            <li>Cannot be extended or implemented</li>
+                            <li>Use with caution</li> 
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example - Compound Type</h2>
+                        <pre><code class="TypeScript">
+    function calcCost(item: {unitCost: number; purchases: number}) {
+        return item.unitCost * item.purchases;
+    }
+
+    let cost = calcCost({
+        unitCost: 12.99,
+        purchases: 10
+    });
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Type Alias</h2>
+                        <ul>
+                            <li>Assigns new name for type</li>
+                            <li>Useful with paired with primitive or compound types</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example - Type Alias</h2>
+                        <pre><code class="TypeScript">
+    type UrlSpec = {
+        scheme: string;
+        host: string;
+        path: string;
+        queries: {key: string; value: string}[]
+    };
+
+    type Version = string;
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Function Type</h2>
+                        <pre><code class="TypeScript">
+    function getUserData(
+        userId: string, 
+        callback: (userData: UserData) =&gt; void) {
+
+        fetch(`/api/users/${userId}`)
+            .then(json =&gt; callback(<UserData>json));
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Generics</h2>
+                        <ul>
+                            <li>Type erasure</li>
+                            <li>Co-/contra- variance automatically inferred</li>
+                            <li>
+                                Used on:
+                                <ul>
+                                    <li>Classes</li>
+                                    <li>Interfaces</li>
+                                    <li>Methods</li>
+                                    <li>Functions</li>
+                                    <li>Type aliases</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example - Generics</h2>
+                        <pre><code class="TypeScript">
+    interface Sequence&lt;T&gt; extends Iterable&lt;T&gt;{
+        filter(predicate: (x: T) =&gt; boolean): Sequence&lt;T&gt;;
+        map&gt;U&lt;(transform: (x: T) =&gt; U): Sequence&lt;U&gt;;
+        flatMap&gt;U&lt;(transform: (x: T) =&gt; Sequence&gt;U&lt;): Sequence&lt;U&gt;;
+    }
+
+    interface SequenceStatic {
+        &lt;T&gt;(source: Iterable&lt;T&gt;): Sequence&lt;T&gt;
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Union Type</h2>
+                        <ul>
+                            <li>Modeling polymorphic behavior</li>
+                            <li>Mimic function overload</li>
+                        </ul>
+                        <p>
+                            <img src="img/union-type.png" title="union type venn diagram" />
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2>Example - Union Type</h2>
+                        <pre><code class="TypeScript">
+    function convertToDate(input: number | string | Date): Date {
+        if (typeof input === "number") {
+            return new Date(Date.utc(input));
+        } else if (typeof input === "string") {
+            return new Date(input);
+        } else if (input instanceof Date) {
+            return input;
+        } else {
+            throw new TypeError();
+        }
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Intersection Types</h2>
+                        <ul>
+                            <li>Usually used for mixins</li>
+                        </ul>
+                        <p>
+                            <img src="img/intersection-type.png" title="intersection type venn diagram"/>
+                        </p>
+                    </section>
+
+                    <section>
+                        <pre><code class="TypeScript">
+    interface Disposable {
+        dispose();
+    }
+
+    function getResource&lt;T&gt;(resourceKey: string): T && Disposable {
+        const resource: T && Disposable = fetchResource(resourceKey);
+        resource.dispose = resource.dispose || function () {
+            releaseResource(resourceKey);
+        };
+
+        return resource;
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <p>Questions?</p>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Part IV. ES6 Language Features</h3>
+                    
+                    <section>
+                        <h2>Block scope variables</h2>
+                        <ul>
+                            <li>let</li>
+                            <li>const <span class="fragment">&rarr; no reassignment</span></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example - block scope variable</h2>
+                        <pre><code class="TypeScript">
+    const callbacks: Function[] = [];
+    let   index = 0;
+    for (const item of collection) {
+        const indexCopy = index++;
+        callbacks.push(function () {
+            console.log(indexCopy);
+            console.dir(item);
+        });
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Arrow Function</h2>
+                        <ul>
+                            <li>Expression body</li>
+                            <li>Lexical this</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example - Arrow Function</h2>
+                        <pre><code class="TypeScript">
+    class RecordStamper {
+        private timestamp = new Date();
+
+        stampRecord(record: Record) {
+            record.timestamp = this.timestamp;
+            record.update();
+        }
+
+        stampAllRecords(records: Record[]) {
+            // ok:
+            records.forEach(r => this.stampRecord(r));
+
+            // wrong:
+            records.forEach(function (r) { this.stampRecord(r); });
+        }
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>For...of Loop</h2>
+                        <ul>
+                            <li>Iterate elements, not keys</li>
+                            <li>Works on Iterable&lt;T&gt;</li>
+                            <li>Customisable &rarr; Symbol.iterator</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>For...of Loop</h2>
+                        <pre><code class="TypeScript">
+    function* primes() {
+        yield 2;
+        yield 3;
+        yield 5;
+        //...
+    }
+
+    for (const prime of primes()) {
+        console.log(`Prime: ${prime}`);
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Default Parameters</h2>
+                        <pre><code class="TypeScript">
+    function formatDate(d: Date, format = "yyyy-MM-dd"): string {
+        //...
+    }
+
+    console.log(formatDate(today));
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Rest Parameters and Spread</h2>
+                        <pre><code class="TypeScript">
+    function memoise&lt;T&gt;(f: (...x) =&gt; T): (...) =&gt; T {
+        const results = new Map&lt;string, T&gt;();
+        return function (...x) {
+            let test = results.get(JSON.stringify(x));
+            if (test === undefined) {
+                test = f(...x); <span class="fragment">// spread</span>
+                results.put(JSON.stringify(x), test);
+            }
+
+            return test;
+        }
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Template Literals</h2>
+                        <pre><code class="TypeScript">
+    const message = `hello, ${name}`;
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Destructuring</h2>
+                        <pre><code class="TypeScript">
+    let x = 1, y = 2;
+    [x, y] = [y, x]; // swap
+
+    let array = [1, 2, 3, 4];
+    let [head, ...array] = array; // remove head
+
+    const {name: {firstName, lastName}, email} = getContact();
+    console.log(`Contact ${firstName} ${lastName} via email on ${email}`);
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Async/await</h2>
+                        <ul>
+                            <li>Exactly how it works in C#</li>
+                            <li>Turns callbacks into procedural code</li>
+                            <li>Works on ES6 Promise object</li>
+                            <li>TypeScript 1.8 &rarr; only available for ES6 targets</li>
+                            <li>TypeScript 2.0 &rarr; available for ES5/3 targets</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example - Async/Await</h2>
+                        <pre><code class="TypeScript">
+    declare function getRecordIds(): Promise&lt;string[]&gt;;
+    declare function getRecordById(id: string): Promise&lt;Record&lg;;
+    declare function saveRecord(record: Record): Promise&lt;void&gt;;
+    async function updateAllRecords(): Promise&lt;number&gt; {
+        const recordIds = await getRecordIds();
+        for (const id of recordIds) {
+            const record = await getRecordById(id);
+            record.setUpdated();
+            await saveRecord(record);
+        }
+    }
+                        </code></pre>
+                    </section>
+                    <section>
+                        <p>Questions?</p>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Part V. ES6 API Enhancements</h3>
+
+                    <section>
+                        <h2>New Objects</h2>
+                        <ul>
+                            <li>Symbol</li>
+                            <li>Promise</li>
+                            <li>fetch</li>
+                            <li>Map and Set</li>
+                            <li>WeakMap and WeakSet</li>
+                            <li>Proxy and Reflection</li>
+                            <li>Typed arrays</li>
+                            <li>and more</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Enhancement to Existing Objects</h2>
+                        <ul>
+                            <li>Array.prototype.includes</li>
+                            <li>String.prototype.startsWith</li>
+                            <li>String.prototype.endsWith</li>
+                            <li>and a lot more</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Shims and Polyfills</h2>
+                        <ul>
+                            <li>New APIs available when targetting ES6</li>
+                            <li>Use shims and polyfills from third party</li>
+                            <li>es6-shim, es6-promise, whatwg-fetch, etc</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <p>Questions?</p>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Part VI. Modules</h3>
+                    
+                    <section>
+                        <h2>Modules? What Modules?</h2>
+                        <ul>
+                            <li>ES6 now formally defines modules</li>
+                            <li>No more global variables</li>
+                            <li>Dependencies are now <strong>explicit</strong></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Adoption</h2>
+                        <ul>
+                            <li>Native support in Browsers &rarr; Chrome and Firefox</li>
+                            <li>Major libraries (jQuery, React, Angular2) can be loaded as modules</li>
+                            <li>Lots of utility modules on NPM</li>
+                            <li>Module loaders to choose from</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Module Loaders</h2>
+                        <p>Tools available to package modules into ES5</p>
+                        <ul>
+                            <li>Require.JS</li>
+                            <li>Browserify</li>
+                            <li>Webpack</li>
+                            <li>System.JS <span class="fragment">&rarr; voted into standard</span></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>ES6/TypeScript Syntax for Modules</h2>
+                        <ul>
+                            <li>Use keyword <strong>export</strong> to make a symbol exportable</li>
+                            <li>Use keyword <strong>import</strong> to load a symbol from another module</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example - ES6 Module</h2>
+                        <p>datetime.ts</p>
+                        <pre><code class="TypeScript">   
+    <span class="fragment" data-fragment-index="1">export </span>class DateTime {
+        //...
+    }
+
+    <span class="fragment" data-fragment-index="1">export </span>class TimeSpan {
+        //...
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Example - ES6 Module</h2>
+                        <p>formatting.ts</p>
+                        <pre><code class="TypeScript">
+    <span class="fragment" data-fragment-index="2">import {DateTime, TimeSpan} from "./datetime";</span>
+
+    <span class="fragment" data-fragment-index="1">export </span>interface Formatter&lt;T&gt; {
+        format(source: T): string;
+    }
+
+    <span class="fragment" data-fragment-index="1">export </span>function getFormatter(locale = "en-AU"): 
+        Formatter&lt;DateTime&gt; && Formatter&lt;TimeSpan&gt; {
+        //...
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Example - Modules with WebPack</h2>
+                        <p>
+                            <img src="img/webpack.png" title="WebPack work flow" />
+                        </p>
+                    </section>
+
+                    <section>
+                        <p>Questions?</p>
+                        <pre><code class="JavaScript">
+    import * as $ from "jquery";
+    $(() =&gt; {
+        $("&lt;p&gt;&lt;/p&gt;").text("hello module").appendTo("body");
+    });
+                        </code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <h4>Part VII. Resources</h4>
+
+                    <section>
+                        <h2>Documentation</h2>
+                        <ul>
+                            <li>typescriptlang.org</li>
+                            <li>TypeScript Playground</li>
+                            <li>TypeScript GitHub page</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Tooling</h2>
+                        <ul>
+                            <li>TSLint</li>
+                            <li>TS-loader</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <p>Questions?</p>
+                    </section>
+                </section>
+            </div>
+        </div>
+
+        <script src="/external/reveal.js-3.3.0/js/reveal.js"></script>
+        <script src="/scripts/distro/index.entry.js"></script>
+    </body>
+</html>

@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "sourceMap": true,
+        "sourceRoot": "src",
+        "outDir": "lib",
+        "declaration": true,
+        "module": "commonjs"
+    },
+    "files": [
+        "src/app.ts",
+        "typings/index.d.ts"
+    ]
+}
